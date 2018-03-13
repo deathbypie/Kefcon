@@ -1,4 +1,4 @@
-namespace WebApi.Dtos
+namespace Kefcon.Dtos
 {
     public class UserDto
     {

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Services;
-using WebApi.Dtos;
+using Kefcon.Services;
+using Kefcon.Dtos;
 using AutoMapper;
 using System.IdentityModel.Tokens.Jwt;
-using WebApi.Helpers;
+using Kefcon.Helpers;
 using Microsoft.Extensions.Options;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using WebApi.Entities;
+using Kefcon.Entities;
 using Microsoft.AspNetCore.Authorization;
 
-namespace WebApi.Controllers
+namespace Kefcon.Controllers
 {
     [Authorize]
     [Route("[controller]")]

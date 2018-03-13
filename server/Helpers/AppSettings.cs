@@ -1,4 +1,4 @@
-namespace WebApi.Helpers
+namespace Kefcon.Helpers
 {
     public class AppSettings
     {

@@ -7,15 +7,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Helpers;
-using WebApi.Services;
+using Kefcon.Helpers;
+using Kefcon.Services;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
-namespace WebApi
+namespace Kefcon
 {
     public class Startup
     {

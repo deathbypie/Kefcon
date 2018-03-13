@@ -1,8 +1,8 @@
 using AutoMapper;
-using WebApi.Dtos;
-using WebApi.Entities;
+using Kefcon.Dtos;
+using Kefcon.Entities;
 
-namespace WebApi.Helpers
+namespace Kefcon.Helpers
 {
     public class AutoMapperProfile : Profile
     {

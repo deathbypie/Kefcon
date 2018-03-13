@@ -1,4 +1,4 @@
-namespace WebApi.Entities
+namespace Kefcon.Entities
 {
     public class User
     {

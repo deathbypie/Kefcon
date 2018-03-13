@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WebApi.Entities;
+using Kefcon.Entities;
 
-namespace WebApi.Helpers
+namespace Kefcon.Helpers
 {
     public class DataContext : DbContext
     {

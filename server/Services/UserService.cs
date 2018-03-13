@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebApi.Entities;
-using WebApi.Helpers;
+using Kefcon.Entities;
+using Kefcon.Helpers;
 
-namespace WebApi.Services
+namespace Kefcon.Services
 {
     public interface IUserService
     {

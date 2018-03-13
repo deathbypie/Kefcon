@@ -12,25 +12,24 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Kefcon.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Kefcon.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         private IUserService _userService;
-        private IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
 
         public UsersController(
             IUserService userService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IConfiguration configuration) : base(mapper)
         {
             _userService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -43,7 +42,7 @@ namespace Kefcon.Controllers
                 return BadRequest("Username or password is incorrect");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] 
@@ -75,8 +74,20 @@ namespace Kefcon.Controllers
 
             try 
             {
+                // validation
+                if (string.IsNullOrWhiteSpace(userDto.Password))
+                    throw new AppException("Password is required");
+
+                if (_userService.GetAll().Any(x => x.Username == user.Username))
+                    throw new AppException("Username '" + user.Username + "' is already taken");
+
+                byte[] passwordHash, passwordSalt;
+                _userService.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
                 // save 
-                _userService.Create(user, userDto.Password);
+                _userService.Create(user);
                 return Ok();
             } 
             catch(AppException ex)
@@ -95,7 +106,7 @@ namespace Kefcon.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(Guid id)
         {
             var user =  _userService.GetById(id);
             var userDto = _mapper.Map<UserDto>(user);
@@ -103,16 +114,42 @@ namespace Kefcon.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserDto userDto)
+        public IActionResult Update(Guid id, [FromBody]UserDto userDto)
         {
             // map dto to entity and set id
-            var user = _mapper.Map<User>(userDto);
-            user.Id = id;
+            var userParam = _mapper.Map<User>(userDto);
+            userParam.Id = id;
+
+            var user = _userService.GetById(id);
 
             try 
             {
+                if (user == null)
+                    throw new AppException("User not found");
+
+                if (userParam.Username != user.Username)
+                {
+                    // username has changed so check if the new username is already taken
+                    if (_userService.GetAll().Any(x => x.Username == userParam.Username))
+                        throw new AppException("Username " + userParam.Username + " is already taken");
+                }
+
+                // update user properties
+                user.FirstName = userParam.FirstName;
+                user.LastName = userParam.LastName;
+                user.Username = userParam.Username;
+
+                // update password if it was entered
+                if (!string.IsNullOrWhiteSpace(userDto.Password))
+                {
+                    byte[] passwordHash, passwordSalt;
+                    _userService.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+
+                    user.PasswordHash = passwordHash;
+                    user.PasswordSalt = passwordSalt;
+                }
                 // save 
-                _userService.Update(user, userDto.Password);
+                _userService.Update(user);
                 return Ok();
             } 
             catch(AppException ex)
@@ -123,7 +160,7 @@ namespace Kefcon.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             _userService.Delete(id);
             return Ok();

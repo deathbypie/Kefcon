@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Kefcon</AssemblyName>
     <RootNamespace>Kefcon</RootNamespace>
+    <UserSecretsId>7d73067d-ac03-40c8-96b4-e345efc4f3e6</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />

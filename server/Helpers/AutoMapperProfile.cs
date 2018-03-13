@@ -10,6 +10,9 @@ namespace Kefcon.Helpers
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+
+            CreateMap<Game, GameDto>();
+            CreateMap<GameDto, Game>();
         }
     }
 }

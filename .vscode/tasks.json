@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/server/WebApi.csproj"
+                "${workspaceRoot}/server/Kefcon.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

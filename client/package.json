@@ -1,21 +1,25 @@
 {
-  "name": "aspnet-core-react-registration-login-example-client",
+  "name": "kefcon",
   "version": "1.0.0",
-  "description": "Client for React with ASP.NET Core User Registration and Login Example",
+  "description": "Kefcon Website",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cornflourblue/aspnet-core-react-registration-login-example.git"
+    "url": "https://github.com/deathbypie/Kefcon.git"
   },
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --open"
   },
   "dependencies": {
+    "bootstrap": "^4.0.0",
     "history": "^4.6.3",
+    "jquery": "^3.3.1",
+    "popper": "^1.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",
+    "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"
@@ -26,9 +30,13 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-3": "^6.24.1",
+    "css-loader": "^0.28.10",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^2.26.0",
     "path": "^0.12.7",
+    "style-loader": "^0.20.3",
     "webpack": "^3.6.0",
+    "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-server": "^2.8.2"
   }
 }

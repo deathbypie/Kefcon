@@ -26,7 +26,7 @@ class HomePage extends React.Component {
                     <ul>
                         {users.items.map((user, index) =>
                             <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
+                                {user.firstName + ' ' + user.lastName + ' - ' + user.email}
                                 {
                                     user.deleting ? <em> - Deleting...</em>
                                     : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>

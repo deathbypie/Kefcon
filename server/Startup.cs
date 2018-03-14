@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Kefcon.Helpers;
 using Kefcon.Services;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +14,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Kefcon.Data;
+using Kefcon.Entities;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Kefcon
 {
@@ -44,6 +46,22 @@ namespace Kefcon
                 options.UseSqlServer(connection)
             );
 
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<ApplicationDataContext>()
+                .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                //todo decide on a password policy
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            });
+
             services.AddMvc();
             services.AddSingleton(Configuration);
             services.AddAutoMapper();
@@ -71,6 +89,7 @@ namespace Kefcon
             });
 
             // configure DI for application services
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
         }

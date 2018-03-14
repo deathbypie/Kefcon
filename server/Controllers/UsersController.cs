@@ -14,6 +14,7 @@ using Kefcon.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Kefcon.Controllers
 {
@@ -36,10 +37,10 @@ namespace Kefcon.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            var user = _userService.Authenticate(userDto.Username, userDto.Password);
+            var user = _userService.Authenticate(userDto.Email, userDto.Password).Result;
 
             if (user == null)
-                return BadRequest("Username or password is incorrect");
+                return BadRequest("Email or password is incorrect");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
@@ -58,7 +59,7 @@ namespace Kefcon.Controllers
             // return basic user info (without password) and token to store client side
             return Ok(new {
                 Id = user.Id,
-                Username = user.Username,
+                Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Token = tokenString
@@ -70,24 +71,23 @@ namespace Kefcon.Controllers
         public IActionResult Register([FromBody]UserDto userDto)
         {
             // map dto to entity
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<ApplicationUser>(userDto);
 
             try 
             {
                 // validation
                 if (string.IsNullOrWhiteSpace(userDto.Password))
-                    throw new AppException("Password is required");
+                    return BadRequest("Password is required");
 
-                if (_userService.GetAll().Any(x => x.Username == user.Username))
-                    throw new AppException("Username '" + user.Username + "' is already taken");
-
-                byte[] passwordHash, passwordSalt;
-                _userService.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
-
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                if (_userService.GetAll().Any(x => x.Email == user.Email))
+                    return BadRequest($"Email '{user.Email}' is already in use");
+                
                 // save 
-                _userService.Create(user);
+                var result = _userService.Create(user, userDto.Password);
+                if(result != null && result.Any())
+                {
+                    return BadRequest(result);
+                }
                 return Ok();
             } 
             catch(AppException ex)
@@ -113,56 +113,65 @@ namespace Kefcon.Controllers
             return Ok(userDto);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody]UserDto userDto)
+        //[HttpPut("{id}")]
+        //public IActionResult Update(Guid id, [FromBody]UserDto userDto)
+        //{
+        //    // map dto to entity and set id
+        //    var userParam = _mapper.Map<ApplicationUser>(userDto);
+        //    userParam.Id = id;
+
+        //    var user = _userService.GetById(id);
+
+        //    try 
+        //    {
+        //        if (user == null)
+        //            return BadRequest("User not found");
+
+        //        if (userParam.Email != user.Email)
+        //        {
+        //            // username has changed so check if the new username is already taken
+        //            if (_userService.GetAll().Any(x => x.Email == userParam.Email))
+        //                return BadRequest($"Username '{userParam.Email}' is already taken");
+        //        }
+
+        //        // update user properties
+        //        user.FirstName = userParam.FirstName;
+        //        user.LastName = userParam.LastName;
+        //        user.Email = userParam.Email;
+
+        //        // save 
+        //        _userService.Update(user);
+        //        return Ok();
+        //    } 
+        //    catch(AppException ex)
+        //    {
+        //        // return error message if there was an exception
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(Guid id)
+        //{
+        //    _userService.Delete(id);
+        //    return Ok();
+        //}
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(Guid userId, string code)
         {
-            // map dto to entity and set id
-            var userParam = _mapper.Map<User>(userDto);
-            userParam.Id = id;
-
-            var user = _userService.GetById(id);
-
-            try 
+            // currently not used
+            if (userId == null || code == null)
             {
-                if (user == null)
-                    throw new AppException("User not found");
-
-                if (userParam.Username != user.Username)
-                {
-                    // username has changed so check if the new username is already taken
-                    if (_userService.GetAll().Any(x => x.Username == userParam.Username))
-                        throw new AppException("Username " + userParam.Username + " is already taken");
-                }
-
-                // update user properties
-                user.FirstName = userParam.FirstName;
-                user.LastName = userParam.LastName;
-                user.Username = userParam.Username;
-
-                // update password if it was entered
-                if (!string.IsNullOrWhiteSpace(userDto.Password))
-                {
-                    byte[] passwordHash, passwordSalt;
-                    _userService.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
-
-                    user.PasswordHash = passwordHash;
-                    user.PasswordSalt = passwordSalt;
-                }
-                // save 
-                _userService.Update(user);
-                return Ok();
-            } 
-            catch(AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(ex.Message);
+                return BadRequest();
             }
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
-        {
-            _userService.Delete(id);
+            var user = _userService.GetById(userId);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+            }
+            await _userService.ConfirmEmailAsync(user, code);
             return Ok();
         }
     }

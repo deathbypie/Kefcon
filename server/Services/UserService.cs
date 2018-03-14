@@ -1,72 +1,98 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Kefcon.Data;
 using Kefcon.Entities;
 using Kefcon.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Kefcon.Services
 {
-    public interface IUserService : IServiceBase<User>
+    public interface IUserService
     {
-        User Authenticate(string username, string password);
-        void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
+        Task<ApplicationUser> Authenticate(string username, string password);
+        IEnumerable<ApplicationUser> GetAll();
+        ApplicationUser GetById(Guid id);
+        IEnumerable<string> Create(ApplicationUser user, string password);
+        void Update(ApplicationUser user);
+        void Delete(Guid id);
+        Task ConfirmEmailAsync(ApplicationUser user, string code);
     }
 
-    public class UserService : ServiceBase<User>, IUserService
+    public class UserService : IUserService
     {
-        public UserService(ApplicationDataContext context) : base(context) { }
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
 
-        public User Authenticate(string username, string password)
+        public UserService(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                return null;
-
-            var user = _context.Users.SingleOrDefault(x => x.Username == username);
-
-            // check if username exists
-            if (user == null)
-                return null;
-
-            // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            // authentication successful
-            return user;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
-        // private helper methods
-
-        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public async Task<ApplicationUser> Authenticate(string email, string password)
         {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                return null;
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            var result = await _signInManager.PasswordSignInAsync(email, password, true, lockoutOnFailure: false);
+            if (result.Succeeded)
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var user = _userManager.Users.SingleOrDefault(a => a.Email == email);
+                return user;
+            }
+            else
+            {
+                return null;
             }
         }
 
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        public IEnumerable<ApplicationUser> GetAll()
         {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            return _userManager.Users;
+        }
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+        public ApplicationUser GetById(Guid id)
+        {
+            return _userManager.Users.SingleOrDefault(a => a.Id == id);
+        }
+
+        public IEnumerable<string> Create(ApplicationUser user, string password)
+        {
+            var result = _userManager.CreateAsync(user, password).Result;
+            if (result.Succeeded)
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
+                _signInManager.SignInAsync(user, false);
+                return null;
             }
+            else {
+                return result.Errors.Select(e => e.Description);
+            }
+        }
 
-            return true;
+        public void Update(ApplicationUser user)
+        {
+            // for later, when user management is implemented
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Guid id)
+        {
+            // Probably will do a disable instead
+            throw new NotImplementedException();
+        }
+
+        public Task ConfirmEmailAsync(ApplicationUser user, string code)
+        {
+            return _userManager.ConfirmEmailAsync(user, code);
         }
     }
 }

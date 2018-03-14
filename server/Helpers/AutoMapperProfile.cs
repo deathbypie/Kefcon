@@ -8,8 +8,8 @@ namespace Kefcon.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>();
+            CreateMap<ApplicationUser, UserDto>();
+            CreateMap<UserDto, ApplicationUser>();
 
             CreateMap<Game, GameDto>();
             CreateMap<GameDto, Game>();

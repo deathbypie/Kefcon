@@ -18,6 +18,7 @@ namespace Kefcon.Controllers
 
         public GameController(IGameService gameService, IMapper mapper) : base(mapper)
         {
+            _gameService = gameService;
         }
 
         [HttpGet]

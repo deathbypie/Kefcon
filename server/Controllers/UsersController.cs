@@ -34,7 +34,7 @@ namespace Kefcon.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("login")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
             var user = _userService.Authenticate(userDto.Email, userDto.Password).Result;
@@ -64,6 +64,13 @@ namespace Kefcon.Controllers
                 LastName = user.LastName,
                 Token = tokenString
             });
+        }
+
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            _userService.Logout();
+            return Ok();
         }
 
         [AllowAnonymous]

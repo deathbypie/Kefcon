@@ -14,6 +14,7 @@ namespace Kefcon.Services
     public interface IUserService
     {
         Task<ApplicationUser> Authenticate(string username, string password);
+        void Logout();
         IEnumerable<ApplicationUser> GetAll();
         ApplicationUser GetById(Guid id);
         IEnumerable<string> Create(ApplicationUser user, string password);
@@ -53,6 +54,11 @@ namespace Kefcon.Services
             {
                 return null;
             }
+        }
+
+        public void Logout()
+        {
+            _signInManager.SignOutAsync();
         }
 
         public IEnumerable<ApplicationUser> GetAll()

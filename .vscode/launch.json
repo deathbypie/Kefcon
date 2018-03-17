@@ -5,6 +5,23 @@
    "version": "0.2.0",
    "configurations": [
         {
+            "name": "Debug Client",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceRoot}/client/src"
+        },
+
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "webRoot": "${workspaceRoot}/client/src",
+            "url": "http://localhost:8080/",
+            // "trace": true,
+        },
+        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
@@ -28,5 +45,6 @@
             "request": "attach",
             "processId": "${command:pickProcess}"
         }
+        
     ]
 }

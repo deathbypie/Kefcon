@@ -17,7 +17,7 @@ function login(email, password) {
         body: JSON.stringify({ email, password })
     };
 
-    return fetch(config.apiUrl + '/users/authenticate', requestOptions)
+    return fetch(config.apiUrl + '/users/login', requestOptions)
         .then(handleResponse, handleError)
         .then(user => {
             // login successful if there's a jwt token in the response
@@ -31,8 +31,14 @@ function login(email, password) {
 }
 
 function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    fetch(config.apiUrl + '/users/logout', requestOptions)
+        .then(() => {
+            localStorage.removeItem('user');
+        });
 }
 
 function getAll() {

@@ -17,9 +17,9 @@
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 9222,
-            "webRoot": "${workspaceRoot}/client/src",
+            "webRoot": "${workspaceRoot}/client",
             "url": "http://localhost:8080/",
-            // "trace": true,
+            "trace": true,
         },
         {
             "name": ".NET Core Launch (web)",

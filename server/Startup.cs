@@ -92,6 +92,7 @@ namespace Kefcon
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IEventService, EventService>();
             services.AddTransient<SeedData>();
         }
 

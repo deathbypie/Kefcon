@@ -13,6 +13,15 @@ namespace Kefcon.Helpers
 
             CreateMap<Game, GameDto>();
             CreateMap<GameDto, Game>();
+
+            CreateMap<Event, EventDto>();
+            CreateMap<EventDto, Event>();
+
+            CreateMap<Timeslot, TimeslotDto>();
+            CreateMap<TimeslotDto, Timeslot>();
+
+            CreateMap<Session, SessionDto>();
+            CreateMap<SessionDto, Session>();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Kefcon.Services
     public abstract class ServiceBase<T> : IServiceBase<T> where T : BaseEntity
     {
         protected ApplicationDataContext _context;
-        private DbSet<T> entities;
+        protected DbSet<T> entities;
 
         public ServiceBase(ApplicationDataContext context)
         {
@@ -36,6 +36,16 @@ namespace Kefcon.Services
                 throw new ArgumentNullException("entity");
             }
             entities.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public void Update(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            _context.Update(entity);
             _context.SaveChanges();
         }
 
@@ -63,16 +73,6 @@ namespace Kefcon.Services
         public T GetById(Guid id)
         {
             return entities.SingleOrDefault(s => s.Id == id);
-        }
-
-        public void Update(T entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-            _context.Update(entity);
-            _context.SaveChanges();
         }
     }
 }

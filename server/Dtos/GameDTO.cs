@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace Kefcon.Dtos
 {
-    public class GameDto
+    public class GameDto : BaseDto
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public string Description { get; set; }

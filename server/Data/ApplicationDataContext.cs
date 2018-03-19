@@ -15,5 +15,8 @@ namespace Kefcon.Data
         { }
 
         public DbSet<Game> Games { get; set; }
+        public DbSet<Timeslot> Timeslots { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Session> Sessions { get; set; }
     }
 }

@@ -18,7 +18,7 @@ class HomePage extends React.Component {
         return (
             <div className="col-md-6 col-md-offset-">
                 <h1>Hi {user.firstName}!</h1>
-                <h3>Do this page next</h3>
+                <h3>Do this page next. Needs links to registration, game schedule.</h3>
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&

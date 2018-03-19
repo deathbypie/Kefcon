@@ -16,5 +16,8 @@ namespace Kefcon.Entities
             {
                 return Email;
             } }
+
+        public IEnumerable<Event> RegisteredEvents { get; set; }
+        public IEnumerable<Session> RegisteredSessions { get; set; }
     }
 }

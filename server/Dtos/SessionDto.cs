@@ -10,5 +10,9 @@ namespace Kefcon.Dtos
         public TimeslotDto Time { get; set; }
 
         public GameDto Game { get; set; }
+
+        public IEnumerable<UserDto> Players { get; set; }
+
+        public UserDto GameMaster { get; set; }
     }
 }

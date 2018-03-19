@@ -63,7 +63,6 @@ namespace Kefcon.Services
                 Duration = span,
                 Sessions = new List<Session>()
             };
-
             timeslot.Event = eventEntity;
 
             _context.Timeslots.Add(timeslot);

@@ -22,23 +22,40 @@ namespace Kefcon.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GameDto> Get()
+        public IEnumerable<GameDto> GetAll()
         {
             var games = _gameService.GetAll();
-
             var models = games.Select(g => _mapper.Map<GameDto>(g));
-            
             return models;
         }
 
-        [HttpPost("[action]")]
-        public IActionResult Post([FromBody]GameDto model)
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
         {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-            }
+            var game = _gameService.GetById(id);
+            var model = _mapper.Map<GameDto>(game);
+            return Ok(model);
+        }
 
+        [HttpPost("[action]")]
+        public IActionResult Create([FromBody]GameDto model)
+        {
+            model.Id = Guid.NewGuid();
+            
+            var game = _mapper.Map<Game>(model);
+
+            _gameService.Create(game);
+
+            return Ok(model);
+        }
+
+        [HttpPut("[action]")]
+        public IActionResult Update([FromBody]GameDto model)
+        {
+            if(model == null || model.Id == Guid.Empty)
+            {
+                return BadRequest("Game not found.");
+            }
             var game = _mapper.Map<Game>(model);
 
             _gameService.Update(game);
@@ -46,7 +63,7 @@ namespace Kefcon.Controllers
             return Ok(model);
         }
 
-        [HttpPost("[action]")]
+        [HttpDelete("[action]")]
         public IActionResult Delete(Guid id)
         {
             _gameService.Delete(id);

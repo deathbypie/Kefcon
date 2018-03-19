@@ -15,7 +15,7 @@ function login(email, password) {
     return dispatch => {
         dispatch(request({ email }));
 
-        userService.login(email, password)
+        return userService.login(email, password)
             .then(
                 user => { 
                     dispatch(success(user));
@@ -42,7 +42,7 @@ function register(user) {
     return dispatch => {
         dispatch(request(user));
 
-        userService.register(user)
+        return userService.register(user)
             .then(
                 () => { 
                     dispatch(success());
@@ -65,7 +65,7 @@ function getAll() {
     return dispatch => {
         dispatch(request());
 
-        userService.getAll()
+        return userService.getAll()
             .then(
                 users => dispatch(success(users)),
                 error => dispatch(failure(error))
@@ -82,7 +82,7 @@ function _delete(id) {
     return dispatch => {
         dispatch(request(id));
 
-        userService.delete(id)
+        return userService.delete(id)
             .then(
                 () => { 
                     dispatch(success(id));

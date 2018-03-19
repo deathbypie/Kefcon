@@ -8,8 +8,7 @@
             "name": "Debug Client",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceRoot}/client/src"
+            "webRoot": "${workspaceRoot}/client/src",
         },
 
         {
@@ -18,7 +17,7 @@
             "name": "Attach to Chrome",
             "port": 9222,
             "webRoot": "${workspaceRoot}/client",
-            "url": "http://localhost:8080/",
+            "urlFilter": "http://localhost:8080*",
             "trace": true,
         },
         {

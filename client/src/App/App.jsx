@@ -10,7 +10,8 @@ import { LoginPage } from '../LoginPage';
 import { LogoutPage } from '../LogoutPage';
 import { RegisterPage } from '../RegisterPage';
 import { KefconNavbar } from '../KefconNavbar';
-import { NotFound} from '../NotFound';
+import { NotFound } from '../NotFound';
+import { GamePage } from '../GamePage';
 
 class App extends React.Component {
     constructor(props) {
@@ -37,10 +38,11 @@ class App extends React.Component {
                             <Router history={history}>
                                 <div>
                                     <Switch>
+                                        <Route path="/register" component={RegisterPage} />
                                         <Route path="/login" component={LoginPage} />
                                         <PrivateRoute path="/logout" component={LogoutPage} />
                                         <PrivateRoute exact path="/" component={HomePage} />
-                                        <Route path="/register" component={RegisterPage} />
+                                        <PrivateRoute path="/games" component={GamePage} />
                                         <Route path="/*" component={NotFound} />
                                     </Switch>
                                 </div>

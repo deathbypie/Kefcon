@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Kefcon.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : BaseController
     {
         private IUserService _userService;

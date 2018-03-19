@@ -1,6 +1,8 @@
 ﻿using System.IO;
+using Kefcon.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kefcon
 {
@@ -11,9 +13,26 @@ namespace Kefcon
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var host = WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetService<SeedData>();
+                try
+                {
+                    initializer.Run();
+                }
+                catch
+                {
+                    // database not created yet
+                }
+            }
+
+            return host;
+        }
     }
 }

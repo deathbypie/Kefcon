@@ -65,7 +65,7 @@ namespace Kefcon
             services.AddMvc();
             services.AddSingleton(Configuration);
             services.AddAutoMapper();
-            
+
             // configure jwt authentication
 
             var secret = Configuration["Secret"];
@@ -92,6 +92,7 @@ namespace Kefcon
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
+            services.AddTransient<SeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

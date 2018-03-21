@@ -13,8 +13,8 @@ namespace Kefcon.Services
     {
         IEnumerable<T> GetAll();
         T GetById(Guid id);
-        void Create(T entity);
-        void Update(T entity);
+        T Create(T entity);
+        T Update(T entity);
         void Delete(Guid id);
     }
 
@@ -29,17 +29,22 @@ namespace Kefcon.Services
             entities = context.Set<T>();
         }
 
-        public void Create(T entity)
+        public virtual T Create(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
+            if(entity.Id == null || entity.Id == Guid.Empty)
+                entity.Id = Guid.NewGuid();
+
             entities.Add(entity);
             _context.SaveChanges();
+
+            return entity;
         }
 
-        public void Update(T entity)
+        public virtual T Update(T entity)
         {
             if (entity == null)
             {
@@ -47,9 +52,11 @@ namespace Kefcon.Services
             }
             _context.Update(entity);
             _context.SaveChanges();
+
+            return entity;
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             if (entity == null)
             {
@@ -59,18 +66,18 @@ namespace Kefcon.Services
             _context.SaveChanges();
         }
 
-        public void Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
             var entity = entities.SingleOrDefault(s => s.Id == id);
             Delete(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return entities.AsEnumerable();
         }
 
-        public T GetById(Guid id)
+        public virtual T GetById(Guid id)
         {
             return entities.SingleOrDefault(s => s.Id == id);
         }

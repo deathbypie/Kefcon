@@ -68,39 +68,5 @@ namespace Kefcon.Controllers
 
             return Ok();
         }
-
-        [HttpPost("[action]")]
-        public IActionResult AddTimeslot(Guid eventId, DateTime startTime, TimeSpan span)
-        {
-            try
-            {
-                var timeslot = _eventService.AddTimeslot(eventId, startTime, span);
-
-                var timeslotDto = _mapper.Map<TimeslotDto>(timeslot);
-
-                return Ok(timeslotDto);
-            }
-            catch(ArgumentException e)
-            {
-                return BadRequest($"Could not find {e.ParamName}");
-            }
-        }
-
-        [HttpPost("[action]")]
-        public IActionResult AddSession(Guid timeslotId, Guid gameId)
-        {
-            try
-            {
-                var session = _eventService.AddSession(timeslotId, gameId);
-                
-                var sessionDto = _mapper.Map<TimeslotDto>(session);
-
-                return Ok(sessionDto);
-            }
-            catch (ArgumentException e)
-            {
-                return BadRequest($"Could not find {e.ParamName}");
-            }
-        }
     }
 }

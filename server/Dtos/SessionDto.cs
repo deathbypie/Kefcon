@@ -7,9 +7,9 @@ namespace Kefcon.Dtos
 {
     public class SessionDto : BaseDto
     {
-        public TimeslotDto Time { get; set; }
+        public Guid GameId { get; set; }
 
-        public GameDto Game { get; set; }
+        public Guid TimeslotId { get; set; }
 
         public IEnumerable<UserDto> Players { get; set; }
 

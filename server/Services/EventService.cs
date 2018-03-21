@@ -16,15 +16,23 @@ namespace Kefcon.Services
     public class EventService : ServiceBase<Event>, IEventService
     {
         private readonly IGameService _gameService;
+        private readonly ITimeslotService _timeslotService;
+        private readonly ISessionService _sessionService;
 
-        public EventService(ApplicationDataContext context, IGameService gameService) : base(context)
+        public EventService(
+            ApplicationDataContext context, 
+            IGameService gameService, 
+            ITimeslotService timeslotService,
+            ISessionService sessionService) : base(context)
         {
             _gameService = gameService;
+            _timeslotService = timeslotService;
+            _sessionService = sessionService;
         }
 
         public Session AddSession(Guid timeslotId, Guid gameId)
         {
-            var timeslot = _context.Timeslots.SingleOrDefault(t => t.Id == timeslotId);
+            var timeslot = _timeslotService.GetById(timeslotId);
             if (timeslot == null)
             {
                 throw new ArgumentNullException("timeslot");
@@ -41,8 +49,9 @@ namespace Kefcon.Services
                 Time = timeslot,
                 Game = game
             };
-            _context.Sessions.Add(session);
-            _context.SaveChanges();
+
+            session.Time = timeslot;
+            _sessionService.Create(session);
 
             return session;
         }
@@ -63,10 +72,9 @@ namespace Kefcon.Services
                 Duration = span,
                 Sessions = new List<Session>()
             };
-            timeslot.Event = eventEntity;
 
-            _context.Timeslots.Add(timeslot);
-            _context.SaveChanges();
+            timeslot.Event = eventEntity;
+            _timeslotService.Create(timeslot);
 
             return timeslot;
         }

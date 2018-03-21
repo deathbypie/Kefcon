@@ -93,6 +93,8 @@ namespace Kefcon
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<ITimeslotService, TimeslotService>();
+            services.AddScoped<ISessionService, SessionService>();
             services.AddTransient<SeedData>();
         }
 

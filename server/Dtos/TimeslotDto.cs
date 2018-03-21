@@ -19,8 +19,8 @@ namespace Kefcon.Dtos
             }
         }
 
-        public IEnumerable<SessionDto> Sessions { get; set; }
+        public IEnumerable<Guid> SessionIds { get; set; }
 
-        public EventDto Event { get; set; }
+        public Guid EventId { get; set; }
     }
 }

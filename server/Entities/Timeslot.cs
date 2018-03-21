@@ -19,7 +19,7 @@ namespace Kefcon.Entities
             }
         }
 
-        public ICollection<Session> Sessions { get; set; }
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
 
         public Event Event { get;set; }
     }

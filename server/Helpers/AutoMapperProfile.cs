@@ -17,10 +17,19 @@ namespace Kefcon.Helpers
             CreateMap<Event, EventDto>();
             CreateMap<EventDto, Event>();
 
-            CreateMap<Timeslot, TimeslotDto>();
+            CreateMap<Timeslot, TimeslotDto>()
+                .ForMember(
+                dto => dto.EventId,
+                timeslot => timeslot.MapFrom(t => t.Event.Id)
+                );
+
             CreateMap<TimeslotDto, Timeslot>();
 
-            CreateMap<Session, SessionDto>();
+            CreateMap<Session, SessionDto>()
+                .ForMember(
+                dto => dto.TimeslotId,
+                session => session.MapFrom(s => s.Time.Id)
+                );
             CreateMap<SessionDto, Session>();
         }
     }

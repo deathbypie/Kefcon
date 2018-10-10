@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
-class RegisterPage extends React.Component {
+class UserRegisterPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -93,5 +93,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedRegisterPage = connect(mapStateToProps)(RegisterPage);
-export { connectedRegisterPage as RegisterPage };
+const connectedUserRegisterPage = connect(mapStateToProps)(UserRegisterPage);
+export { connectedUserRegisterPage as UserRegisterPage };

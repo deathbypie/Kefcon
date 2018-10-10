@@ -44,32 +44,14 @@ class GamePage extends React.Component {
         }
     }
 
-    handleChange(e, type) {
-        const value = e.target.value;
+    handleChange(e) {
+        const target = e.target;
+        const value = target.value;
         const game = this.state.activeGame;
 
-        switch (type) {
-            case "name":
-                this.setState({
-                    activeGame: { ...game, name: value }
-                });
-                break;
-            case "description":
-                this.setState({
-                    activeGame: { ...game, description: value }
-                });
-                break;
-            case "difficulty":
-                this.setState({
-                    activeGame: { ...game, difficulty: value }
-                });
-                break;
-            case "numberOfPlayers":
-                this.setState({
-                    activeGame: { ...game, numberOfPlayers: value }
-                });
-                break;
-        }
+        this.setState({
+            activeGame: { ...game, [target.name]: value }
+        });
     }
 
     render() {
@@ -80,9 +62,7 @@ class GamePage extends React.Component {
                 {games.loading && <em>Loading games...</em>}
                 {games.error && <span className="text-danger">ERROR: {games.error}</span>}
                 <div>
-                    {games.items &&
-                        <GameList games={games} onClick={(game) => this.fillModal(game)}></GameList>
-                    }
+                    <GameList games={games} onClick={(game) => this.fillModal(game)}></GameList>
                     {this.state.activeGame &&
                         <GameModal
                             game={this.state.activeGame}

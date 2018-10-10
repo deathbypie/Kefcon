@@ -42,11 +42,9 @@ function login(email, password) {
 }
 
 function logout() {
-    const handleResponse = () => {
-        localStorage.removeItem('user');
-    }
+    apiService.makeRequest('/users/logout');
 
-    apiService.makeRequest('/users/logout').then(handleResponse);;
+    localStorage.removeItem('user');
 }
 
 function getAll() {

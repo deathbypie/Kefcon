@@ -21,12 +21,17 @@ namespace Kefcon.Services
             _timeslotService = timeslotService;
         }
 
-        Session ISessionService.Create(Session session, Guid timeslotId)
+        public Session Create(Session session, Guid timeslotId)
         {
             var timeslot = _timeslotService.GetById(timeslotId);
             session.Time = timeslot;
 
             return Create(session);
+        }
+
+        public override Session Update(Session entity)
+        {
+            throw new NotImplementedException("Cannot update sessions directly.");
         }
     }
 }

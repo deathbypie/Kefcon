@@ -19,7 +19,7 @@ namespace Kefcon.Controllers
             _timeslotService = timeslotService;
         }
         [HttpGet]
-        public IEnumerable<TimeslotDto> GetAll()
+        public IEnumerable<TimeslotDto> GetAll(Guid eventId)
         {
             var timeslots = _timeslotService.GetAll();
             var timeslotDtos = timeslots.Select(g => _mapper.Map<TimeslotDto>(g));

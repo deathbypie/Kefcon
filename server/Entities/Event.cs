@@ -9,6 +9,8 @@ namespace Kefcon.Entities
 {
     public class Event : BaseEntity
     {
+        public string Name { get; set; }
+
         public Event()
             => Users = new JoinCollection<ApplicationUser, UserEvent>(
                 UserEvents,

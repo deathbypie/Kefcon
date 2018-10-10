@@ -44,6 +44,11 @@ namespace Kefcon.Services
             return entity;
         }
 
+        /// <summary>
+        /// Replaces all properties of an entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual T Update(T entity)
         {
             if (entity == null)

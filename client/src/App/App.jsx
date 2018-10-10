@@ -8,10 +8,11 @@ import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { LogoutPage } from '../LogoutPage';
-import { RegisterPage } from '../RegisterPage';
+import { UserRegisterPage } from '../UserRegisterPage';
 import { KefconNavbar } from '../KefconNavbar';
 import { NotFound } from '../NotFound';
 import { GamePage } from '../GamePage';
+import { EventPage } from '../EventPage';
 
 class App extends React.Component {
     constructor(props) {
@@ -38,11 +39,12 @@ class App extends React.Component {
                             <Router history={history}>
                                 <div>
                                     <Switch>
-                                        <Route path="/register" component={RegisterPage} />
+                                        <Route path="/register" component={UserRegisterPage} />
                                         <Route path="/login" component={LoginPage} />
                                         <PrivateRoute path="/logout" component={LogoutPage} />
                                         <PrivateRoute exact path="/" component={HomePage} />
                                         <PrivateRoute path="/games" component={GamePage} />
+                                        <PrivateRoute path="/events" component={EventPage} />
                                         <Route path="/*" component={NotFound} />
                                     </Switch>
                                 </div>

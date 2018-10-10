@@ -27,5 +27,19 @@ namespace Kefcon.Services
 
             return Create(timeslot);
         }
+
+        public override Timeslot Update(Timeslot entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            var savedEntity = entities.SingleOrDefault(t => t.Id == entity.Id);
+
+            savedEntity.StartTime = entity.StartTime;
+            savedEntity.Duration = entity.Duration;
+
+            return base.Update(savedEntity);
+        }
     }
 }

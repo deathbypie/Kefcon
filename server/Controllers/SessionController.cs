@@ -19,7 +19,7 @@ namespace Kefcon.Controllers
             _sessionService = sessionService;
         }
         [HttpGet]
-        public IEnumerable<SessionDto> GetAll()
+        public IEnumerable<SessionDto> GetAll(Guid timeslotId)
         {
             var sessions = _sessionService.GetAll();
             var sessionDtos = sessions.Select(g => _mapper.Map<SessionDto>(g));
@@ -46,19 +46,19 @@ namespace Kefcon.Controllers
             return Ok(sessionDto);
         }
 
-        [HttpPut("[action]")]
-        public IActionResult Update([FromBody]SessionDto sessionDto)
-        {
-            if (sessionDto == null || sessionDto.Id == Guid.Empty)
-            {
-                return BadRequest("Session not found.");
-            }
-            var sessionEntity = _mapper.Map<Session>(sessionDto);
+        //[HttpPut("[action]")]
+        //public IActionResult Update([FromBody]SessionDto sessionDto)
+        //{
+        //    if (sessionDto == null || sessionDto.Id == Guid.Empty)
+        //    {
+        //        return BadRequest("Session not found.");
+        //    }
+        //    var sessionEntity = _mapper.Map<Session>(sessionDto);
 
-            _sessionService.Update(sessionEntity);
+        //    _sessionService.Update(sessionEntity);
 
-            return Ok(sessionDto);
-        }
+        //    return Ok(sessionDto);
+        //}
 
         [HttpDelete("[action]")]
         public IActionResult Delete(Guid id)

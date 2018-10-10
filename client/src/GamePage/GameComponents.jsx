@@ -71,15 +71,15 @@ export class GameModal extends React.Component {
                     <Form>
                         <FormGroup>
                             <Label for="name">Name</Label>
-                            <Input value={this.props.game.name} onChange={(e) => handleChange(e, "name")} type="text" valid />
+                            <Input name="name" value={this.props.game.name || ''} onChange={(e) => handleChange(e)} type="text" valid />
                         </FormGroup>
                         <FormGroup>
                             <Label for="description">Description</Label>
-                            <Input value={this.props.game.description} onChange={(e) => handleChange(e, "description")} type="textArea" valid />
+                            <Input name="description" value={this.props.game.description || ''} onChange={(e) => handleChange(e)} type="textArea" valid />
                         </FormGroup>
                         <FormGroup>
                             <Label for="difficulty">Difficulty</Label>
-                            <select value={this.props.game.difficulty} onChange={(e) => handleChange(e, "difficulty")}>
+                            <select name="difficulty" value={this.props.game.difficulty || ''} onChange={(e) => handleChange(e)}>
                                 <option value="Easy">Easy</option>
                                 <option value="Medium">Medium</option>
                                 <option value="Hard">Hard</option>
@@ -87,7 +87,7 @@ export class GameModal extends React.Component {
                         </FormGroup>
                         <FormGroup>
                             <Label for="numberOfPlayers">Number of Players</Label>
-                            <Input value={this.props.game.numberOfPlayers} onChange={(e) => handleChange(e, "numberOfPlayers")} type="number" valid />
+                            <Input name="numberOfPlayers" value={this.props.game.numberOfPlayers || ''} onChange={(e) => handleChange(e)} type="number" valid />
                         </FormGroup>
                     </Form>
                 </ModalBody>

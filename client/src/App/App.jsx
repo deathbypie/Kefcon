@@ -13,6 +13,7 @@ import { KefconNavbar } from '../KefconNavbar';
 import { NotFound } from '../NotFound';
 import { GamePage } from '../GamePage';
 import { EventPage } from '../EventPage';
+import { ManageEventPage } from '../ManageEventPage';
 
 class App extends React.Component {
     constructor(props) {
@@ -45,6 +46,7 @@ class App extends React.Component {
                                         <PrivateRoute exact path="/" component={HomePage} />
                                         <PrivateRoute path="/games" component={GamePage} />
                                         <PrivateRoute path="/events" component={EventPage} />
+                                        <PrivateRoute path="/ManageEvent/:id" component={ManageEventPage} />
                                         <Route path="/*" component={NotFound} />
                                     </Switch>
                                 </div>

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Link } from 'react-router-dom'
 
 export class EventList extends React.Component {
     render() {
@@ -7,7 +8,7 @@ export class EventList extends React.Component {
         return (
             <Fragment>
                 <Button onClick={() => onClick(null)}>New Event</Button>
-                {events && events.items &&
+                {events && events.items && events.items.length &&
                     <Table>
                         <thead>
                             <tr>
@@ -33,7 +34,7 @@ class EventRow extends React.Component {
         return (
             <tr>
                 <td>
-                    {event.name}
+                    <Link to={"ManageEvent/" + event.id} props = {event.id}>{event.name}</Link>
                 </td>
                 <td>
                     <Button onClick={() => onClick(event)}>Edit</Button>

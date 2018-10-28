@@ -15,13 +15,30 @@ export class TimeslotList extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {event.data.timelots.map(event =>
-                                <TimeslotRow key={event.id} onClick={onClick} event={event} ></TimeslotRow>
+                            {event.data.timelots.map(timeslot =>
+                                <TimeslotRow key={timeslot.id} onClick={onClick} timeslot={timeslot} ></TimeslotRow>
                             )}
                         </tbody>
                     </Table >
                 }
             </Fragment>
+        )
+    }
+}
+
+class TimeslotRow extends React.Component {
+
+    render() {
+        const { timeslot, onClick } = this.props;
+        return (
+            <tr>
+                <td>
+                    {timeslot.startTime} - {timeslot.endTime}
+                </td>
+                <td>
+                    <Button onClick={() => onClick(event)}>Edit</Button>
+                </td>
+            </tr>
         )
     }
 }
